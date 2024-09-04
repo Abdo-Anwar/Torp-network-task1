@@ -27,7 +27,7 @@ while True:
             correction_message = f"Expected packet number: {Pk_Num}"
             server_socket.sendto(correction_message.encode('utf-8'), client_address)
   
-    if Pk_Num > 10:  # Corrected stopping condition
+    if Pk_Num > 10:  
             break
 
 server_socket.close()
