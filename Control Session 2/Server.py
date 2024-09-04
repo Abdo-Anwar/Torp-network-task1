@@ -1,4 +1,5 @@
 import socket
+import random
 
 HOST = socket.gethostbyname(socket.gethostname())
 PORT = 12345
@@ -11,18 +12,22 @@ print(f"Server listening on {HOST}:{PORT}")
 while True:
     packet_num_bytes, client_address = server_socket.recvfrom(4)
     
-    if not packet_num_bytes:
-        continue
-    
-    packet_num = int.from_bytes(packet_num_bytes, 'big')
+    if packet_num_bytes:
+        packet_num = int.from_bytes(packet_num_bytes, 'big')
+        
     
     if packet_num == Pk_Num:
-        print(f"Received packet number: {packet_num}")
-        Pk_Num += 1
-        response = f"Packet {packet_num} received"
-        server_socket.sendto(response.encode('utf-8'), client_address)
-    
-    if packet_num == 10:
-        break
+            print(f"Received packet number: {packet_num}")
+            Pk_Num += 1
+            response = f"Packet {packet_num} received"
+            server_socket.sendto(response.encode('utf-8'), client_address)
+    else:
+            print(f"Received packet number is wrong: {packet_num}")
+            print(f"The packet number should be: {Pk_Num}")
+            correction_message = f"Expected packet number: {Pk_Num}"
+            server_socket.sendto(correction_message.encode('utf-8'), client_address)
+  
+    if Pk_Num > 10:  # Corrected stopping condition
+            break
 
 server_socket.close()
